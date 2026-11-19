@@ -1,4 +1,5 @@
 import type { Msg } from "../commons/type";
+import type { Ui } from "../commons/ui";
 
 
 export async function sendChat(messages: Msg[]) {
@@ -11,7 +12,8 @@ export async function sendChat(messages: Msg[]) {
     });
     if (resp.ok && resp.status === 200){
         const data = await resp.json();
-        return data.message;
+        if (!data?.ui) throw new Error('返回格式不对');
+        return (data as Ui).ui;
     } else {
         throw new Error(`${resp.status} Failed to send chat: ${resp.status} ${resp.statusText}`);
     }

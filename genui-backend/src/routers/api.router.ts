@@ -14,7 +14,7 @@ router.post('/chat', async (req, res) => {
     const messages = req.body;
     const chatResponse = await chat(messages);
     if (chatResponse !== null) {
-        res.status(200).json({ message: chatResponse });
+        res.status(200).json({ ui: chatResponse });
     } else {
         res.status(500).json({ error: 'Chat failed' });
     }
