@@ -1,0 +1,28 @@
+{
+  "name": "genui-chat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev:api": "npm run dev --workspace=genui-backend",
+    "dev:web": "npm run dev --workspace=genui",
+    "build": "npm run build --workspaces",
+    "build:web": "npm run build --workspace=genui"
+  },
+  "private": true,
+  "workspaces": [
+    "genui",
+    "genui-backend"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qdfxbb/genui.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/qdfxbb/genui/issues"
+  },
+  "homepage": "https://github.com/qdfxbb/genui#readme"
+}
