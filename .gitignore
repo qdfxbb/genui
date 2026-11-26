@@ -26,6 +26,7 @@ genui-backend/config/.env.test
 # ================= 测试产物 =================
 # 每次跑测试都会重写
 genui-backend/src/repos/common/database.test.json
+genui-protocol/test/
 
 # ================= 操作系统 =================
 .DS_Store

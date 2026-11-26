@@ -1,7 +1,10 @@
 import { BlockDefinition, uiRegistry } from "./ui";
 
 
-export function registerUiBlock(blockDefinition: BlockDefinition) {
+export function registerUiBlock<P>(
+    blockDefinition: BlockDefinition,
+    component: React.ComponentType<P>
+) {
     if (uiRegistry.initialized) {
         throw new Error('UiBlock 注册已初始化，无法再注册新类型');
     }
@@ -10,5 +13,9 @@ export function registerUiBlock(blockDefinition: BlockDefinition) {
         throw new Error(`UiBlock 类型重复注册：${blockDefinition.type}`);
     }
 
-    uiRegistry.blocks.set(blockDefinition.type, { definition: blockDefinition });
+    uiRegistry.blocks.set(blockDefinition.type, {
+        definition: blockDefinition,
+        component: component
+    });
+
 }

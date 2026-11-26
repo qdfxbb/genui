@@ -1,3 +1,5 @@
+import { UiComponent } from "../render/render";
+
 type PropertyDefinition = {
     type: string;
     required: boolean;
@@ -19,11 +21,24 @@ export type BlockDefinition = {
     properties: Record<string, PropertyDefinition>;
 }
 
-type BlockRegistry = {
-    definition: BlockDefinition;
-}
+// type BlockRegistry = {
+//     definition: BlockDefinition;
+// }
 
 export const uiRegistry = {
-    blocks: new Map<string, BlockRegistry>,
+    blocks: new Map<string, UiComponent<any>>,
     initialized: false,
 }
+
+// AI 响应 根节点
+export type AiResponse = {
+    type: "ai_response";
+    children: UiNode[];
+}
+
+export type UiNode = {
+    type: string;
+    props: Record<string, any>;
+    children?: UiNode[];
+}
+

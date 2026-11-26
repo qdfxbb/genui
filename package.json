@@ -12,7 +12,8 @@
   "private": true,
   "workspaces": [
     "genui",
-    "genui-backend"
+    "genui-backend",
+    "genui-protocol"
   ],
   "repository": {
     "type": "git",

@@ -1,4 +1,4 @@
-import { BlockDefinition } from "../ui/ui";
+import { AiResponse, BlockDefinition, UiNode, uiRegistry } from "../ui/ui";
 
 function propertyType(type: BlockDefinition["properties"][string]): string {
     if (type.type === 'array') {
@@ -74,4 +74,62 @@ export function convertToJsonSchema(ui: BlockDefinition) {
     }
 
     return schema;
+}
+
+// 将 AI 返回的 JSON 转换为 UiNode 树
+export function parseAiOutputText(text: string) {
+    try {
+        const root: AiResponse = {
+            type: "ai_response",
+            children: [],
+        }
+        const raw = JSON.parse(text);
+        if (raw.children instanceof Array === false) {
+            throw new Error("children 不是数组");
+        }
+        const firstNodes = raw.children as any[];
+        if (uiRegistry.initialized === false) {
+            throw new Error("uiRegistry 未初始化");
+        }
+        firstNodes.map(node => {
+            root.children.push(parseNode(node));
+        })
+        return root;
+
+    } catch (error) {
+        const message = error instanceof Error ? error.message : String(error)
+        throw new Error(`AI 响应转换失败：${message}`, { cause: error })
+    }
+    
+
+}
+
+function parseNode(ui: any) {
+    if(uiRegistry.blocks.has(ui.type) === false) {
+        throw new Error(`未知的 UiBlock 类型：${ui.type}`);
+    }
+    const blockDefinition = uiRegistry.blocks.get(ui.type)!.definition;
+    
+    const {type, children, ...rest} = ui;
+    const childrenNodes: UiNode[] = [];
+    if (children !== undefined) {
+        if (children instanceof Array === false) {
+            throw new Error(`UiBlock 类型 ${type} 的 children 不是数组`);
+        }
+        if (blockDefinition.children === false) {
+            throw new Error(`UiBlock 类型 ${type} 不允许有子组件`);
+        }
+        children.map((child: any) => {
+            childrenNodes.push(parseNode(child));
+        })
+    }
+    const node: UiNode = {
+        type: type,
+        props: rest,
+    }
+    if (childrenNodes.length > 0) {
+        node.children = childrenNodes;
+    }
+    return node;
+
 }
